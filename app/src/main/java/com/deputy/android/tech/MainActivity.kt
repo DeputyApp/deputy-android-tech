@@ -3,13 +3,17 @@ package com.deputy.android.tech
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.deputy.android.tech.ui.animals.AnimalsScreen
+import com.deputy.android.tech.ui.books.BooksScreen
 import com.deputy.android.tech.ui.theme.DeputyAndroidTechTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,12 +21,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DeputyAndroidTechTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                val navController = rememberNavController()
+                Scaffold(
+                    topBar = { TopBar() }
                 ) {
-                    Greeting("Android")
+                    MainNavHost(
+                        navController = navController,
+                        onScreenChange = { }
+                    )
                 }
             }
         }
@@ -30,14 +36,63 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun TopBar() {
+    TopAppBar(title = { Text("Deputy Android Tech") })
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    DeputyAndroidTechTheme {
-        Greeting("Android")
+@SuppressWarnings("LongMethod")
+private fun MainNavHost(
+    navController: NavHostController,
+    onScreenChange: (String) -> Unit
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screens.Main.name
+    ) {
+        composable(Screens.Main.name) {
+            MainContent { screen ->
+                navController.navigate(screen.name)
+            }
+        }
+        composable(Screens.Animals.name) {
+            AnimalsScreen()
+        }
+        composable(Screens.Books.name) {
+            BooksScreen()
+        }
+    }
+}
+
+@Composable
+fun MainContent(
+    onClick: (Screens) -> Unit
+) {
+    Column(Modifier.fillMaxWidth()) {
+        val topics = listOf("Animals", "Books")
+        topics.forEach { topic ->
+            TopicCard(topic, onClick = {
+                when (topic) {
+                    "Animals" -> onClick(Screens.Animals)
+                    "Books" -> onClick(Screens.Books)
+                }
+            })
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun TopicCard(topic: String, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .height(80.dp)
+            .fillMaxWidth(),
+        onClick = onClick
+    ) {
+        Column(Modifier.padding(8.dp)) {
+            Text(text = topic)
+        }
     }
 }
