@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.deputy.android.tech.ui.animals.AnimalsScreen
 import com.deputy.android.tech.ui.books.BooksScreen
+import com.deputy.android.tech.ui.coffee.CoffeeScreen
 import com.deputy.android.tech.ui.theme.DeputyAndroidTechTheme
 
 class MainActivity : ComponentActivity() {
@@ -61,6 +62,9 @@ private fun MainNavHost(
         composable(Screens.Books.name) {
             BooksScreen()
         }
+        composable(Screens.Coffee.name) {
+            CoffeeScreen()
+        }
     }
 }
 
@@ -69,12 +73,13 @@ fun MainContent(
     onClick: (Screens) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
-        val topics = listOf("Animals", "Books")
+        val topics = listOf("Animals", "Books", "Coffee")
         topics.forEach { topic ->
             TopicCard(topic, onClick = {
                 when (topic) {
                     "Animals" -> onClick(Screens.Animals)
                     "Books" -> onClick(Screens.Books)
+                    "Coffee" -> onClick(Screens.Coffee)
                 }
             })
         }
