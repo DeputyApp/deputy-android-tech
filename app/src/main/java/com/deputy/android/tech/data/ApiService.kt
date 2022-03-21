@@ -13,4 +13,22 @@ class ApiService {
             .build()
             .create(CoffeeApi::class.java)
     }
+
+    val booksApi by lazy {
+        Retrofit
+            .Builder()
+            .baseUrl(BooksApi.API_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create(BooksApi::class.java)
+    }
+
+    val animalsApi by lazy {
+        Retrofit
+            .Builder()
+            .baseUrl(AnimalsApi.API_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create(AnimalsApi::class.java)
+    }
 }

@@ -5,4 +5,8 @@ class Repository(
 ) {
 
     suspend fun getRandomCoffee() = apiService.coffeeApi.getRandom()
+
+    suspend fun searchForKotlinBooks() = apiService.booksApi.searchForKotlinBooks()
+
+    suspend fun getRandomAnimal() = apiService.animalsApi.getRandom()
 }
